@@ -69,10 +69,16 @@ public class PersonFacade implements IPersonFacade{
         if(p == null){
             throw new PersonNotFoundException("Could not delete, provided id does not exist");
         }
+        Address address = p.getAddress();
+        Query q = em.createQuery("SELECT p FROM Person p WHERE p.address.id = :id");
+        q.setParameter("id", id);
+        
         try {
             em.getTransaction().begin();
             em.remove(p);
-            em.remove(p.getAddress());
+            if(q.getResultList().size() < 1){
+            em.remove(address);
+            }
             em.getTransaction().commit();
         } finally {
             em.close();
@@ -83,8 +89,7 @@ public class PersonFacade implements IPersonFacade{
     @Override
     public PersonDTO getPerson(int id) throws PersonNotFoundException{
         EntityManager em = getEntityManager();
-        int dummy[]  = {1,2};
-System.out.println("hej" + dummy[10]);
+        
         try {
             TypedQuery<Person> q = em.createQuery("SELECT p FROM Person p WHERE p.id = :id", Person.class);
             q.setParameter("id", id);

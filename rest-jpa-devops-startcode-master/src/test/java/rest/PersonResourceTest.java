@@ -1,3 +1,4 @@
+
 package rest;
 
 import utils.EMF_Creator;
@@ -48,7 +49,7 @@ public class PersonResourceTest {
         RestAssured.defaultParser = Parser.JSON;
     }
     
-    @AfterAll
+    //@AfterAll
     public static void closeTestServer(){
         //System.in.read();
          //Don't forget this, if you called its counterpart in @BeforeAll
